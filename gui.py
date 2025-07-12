@@ -10,7 +10,7 @@ import random
 
 TEAM_ID = "1000" #change accordingly to the team number we get
 
-class GroundStation(QtWidgets.QMainWindow):
+class GroundStation(QtWidgets.QMainWindow): #Setting up the main application window
     def __init__(self):
         super().__init__()
         self.setWindowTitle("TMU CanSat Ground Station")
@@ -26,7 +26,7 @@ class GroundStation(QtWidgets.QMainWindow):
     def init_ui(self):
         self.tabs = QtWidgets.QTabWidget()
 
-        # Tabs
+        # Adding Tabs
         self.telemetry_tab = QtWidgets.QWidget()
         self.command_tab = QtWidgets.QWidget()
         self.log_tab = QtWidgets.QWidget()
@@ -79,6 +79,8 @@ class GroundStation(QtWidgets.QMainWindow):
         self.btn_cal = QtWidgets.QPushButton("CAL")
         self.btn_mech = QtWidgets.QPushButton("Activate Heatshield")
 
+        #Does not really do anything except adding the commands like CXON, SIM ENABLE, SIM ACTIVATE, HEATSHIELD ON
+        # Can improve this bit by making changes to the data by activating these buttons
         self.btn_cxon.clicked.connect(lambda: self.send_command("CMD,{0},CX,ON".format(TEAM_ID)))
         self.btn_sim_enable.clicked.connect(lambda: self.send_command("CMD,{0},SIM,ENABLE".format(TEAM_ID)))
         self.btn_sim_activate.clicked.connect(lambda: self.send_command("CMD,{0},SIM,ACTIVATE".format(TEAM_ID)))
@@ -112,7 +114,7 @@ class GroundStation(QtWidgets.QMainWindow):
             self.log("Simulation stopped.")
 
     def read_simulated_telemetry(self):
-        self.packet_count += 1
+        self.packet_count += 1 
         time_str = datetime.utcnow().strftime("%H:%M:%S")
         altitude = round(100 + random.uniform(-5, 5), 2)
         temperature = round(25 + random.uniform(-2, 2), 2)
@@ -139,7 +141,8 @@ class GroundStation(QtWidgets.QMainWindow):
         if cmd:
             self.send_command(cmd)
             self.cmd_input.clear()
-
+            
+# will be adding certain values from sensor signals 
     def save_csv(self):
         filename = f"Flight_{TEAM_ID}.csv"
         headers = ["TEAM_ID", "MISSION_TIME", "PACKET_COUNT", "MODE", "STATE",
